@@ -12,7 +12,6 @@ public class Test {
             kvClient.put("k-" + index, "v-" + index);
         }
 
-        //查询数据
         for (int index = 0; index < 5; ++index) {
             String value = (String) kvClient.get("k-" + index);
             System.out.println("get [" + "k-" + index + " value is [" + value + "]");

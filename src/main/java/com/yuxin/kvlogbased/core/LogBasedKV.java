@@ -1,5 +1,6 @@
 package com.yuxin.kvlogbased.core;
 
+import com.yuxin.kvlogbased.MyObjectOutputStream;
 import com.yuxin.kvlogbased.api.KVClient;
 import com.yuxin.kvlogbased.enums.CommandTypeEnum;
 import com.yuxin.kvlogbased.model.CommandRequestModel;
@@ -18,8 +19,13 @@ public class LogBasedKV implements KVClient {
         ObjectOutputStream oos = null;
 
         try {
-            oos = new ObjectOutputStream(new FileOutputStream(logFile));
+            FileOutputStream fos =new FileOutputStream(logFile, true);
 
+            if (logFile.length() < 1) {
+                oos = new ObjectOutputStream(fos);
+            } else {
+                oos = new MyObjectOutputStream(fos);
+            }
             CommandRequestModel commandRequestModel = new CommandRequestModel();
             commandRequestModel.setCommandTypeEnum(CommandTypeEnum.SET);
             commandRequestModel.setKey(key);
@@ -46,7 +52,7 @@ public class LogBasedKV implements KVClient {
         ObjectInputStream ois = null;
         try {
             FileInputStream fis = new FileInputStream(logFile);
-            ois = new ObjectInputStream(new FileInputStream(logFile));
+            ois = new ObjectInputStream(fis);
             CommandRequestModel lastUpdateCommand = null;
             CommandRequestModel curCommand = (CommandRequestModel) ois.readObject();
             while (curCommand != null) {
@@ -79,7 +85,13 @@ public class LogBasedKV implements KVClient {
     public void del(String key) {
         ObjectOutputStream oos = null;
         try {
-            oos = new ObjectOutputStream(new FileOutputStream(logFile));
+            FileOutputStream fos =new FileOutputStream(logFile, true);
+
+            if (logFile.length() < 1) {
+                oos = new ObjectOutputStream(fos);
+            } else {
+                oos = new MyObjectOutputStream(fos);
+            }
 
             CommandRequestModel commandRequestModel = new CommandRequestModel();
             commandRequestModel.setCommandTypeEnum(CommandTypeEnum.DEL);
