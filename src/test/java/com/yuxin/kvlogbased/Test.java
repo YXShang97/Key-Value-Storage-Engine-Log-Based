@@ -8,17 +8,16 @@ public class Test {
         String logFileName = "kv.log";
         KVClient kvClient = new LogBasedKV(logFileName);
 
-        for (int index = 0; index < 5; ++index) {
-            kvClient.put("k-" + index, "v-" + index);
-        }
+//        for (int index = 0; index < 5; ++index) {
+//            kvClient.put("k-" + index, "v-" + index);
+//        }
+//
+//        for (int index = 0; index < 5; ++index) {
+//            String value = (String) kvClient.get("k-" + index);
+//            System.out.println("get [" + "k-" + index + " value is [" + value + "]");
+//        }
 
-        //查询数据
-        for (int index = 0; index < 5; ++index) {
-            String value = (String) kvClient.get("k-" + index);
-            System.out.println("get [" + "k-" + index + " value is [" + value + "]");
-        }
-
-        kvClient.del("k-" + 3);
+        kvClient.del("k-" + 2);
 
         System.out.println("after del 3");
 
