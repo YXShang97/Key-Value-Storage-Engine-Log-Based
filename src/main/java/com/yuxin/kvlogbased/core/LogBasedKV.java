@@ -54,12 +54,24 @@ public class LogBasedKV implements KVClient {
             FileInputStream fis = new FileInputStream(logFile);
             ois = new ObjectInputStream(fis);
             CommandRequestModel lastUpdateCommand = null;
-            CommandRequestModel curCommand = (CommandRequestModel) ois.readObject();
-            while (curCommand != null) {
+            CommandRequestModel curCommand = null;
+
+/*            while (curCommand != null) {
                 if (key.equals(curCommand.getKey())) {
                     lastUpdateCommand = curCommand;
                 }
                 curCommand = (CommandRequestModel) ois.readObject();
+            }*/
+
+            try {
+                while (true) {
+                    curCommand = (CommandRequestModel) ois.readObject();
+//                  System.out.println("readObject result curCommand=" + JSON.toJSONString(curCommand));
+                    if (key.equals(curCommand.getKey())) {
+                        lastUpdateCommand = curCommand;
+                    }
+                }
+            } catch (EOFException e) {
             }
 
             if (lastUpdateCommand == null || lastUpdateCommand.getCommandTypeEnum() == CommandTypeEnum.DEL) {
